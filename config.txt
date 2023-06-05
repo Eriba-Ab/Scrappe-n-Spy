@@ -1,3 +1,3 @@
-sender_email=your_sender_email@example.com
-sender_password=your_sender_email_password
-receiver_email=receiver_email@example.com
+sender_email=scrapper.pyy@gmail.com
+sender_password=y0ur_sender_email_passw0rd
+receiver_email=eribainc@gmail.com

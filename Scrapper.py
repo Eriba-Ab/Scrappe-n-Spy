@@ -8,6 +8,7 @@ USER_AGENT = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTM
 CONFIG_FILE = 'config.txt'
 LOG_FILE = 'log.txt'
 
+
 def send_email(product_title, product_link, price):
     # Load email configuration from config file
     sender_email, sender_password, receiver_email = load_email_configuration()
@@ -27,7 +28,8 @@ def send_email(product_title, product_link, price):
     except Exception as e:
         log_message(f'Failed to send email notification: {str(e)}')
 
-def scrape_product_price(url):
+
+def scrape_product_info(url, element_tag):
     headers = {'User-Agent': USER_AGENT}
 
     try:
@@ -38,23 +40,26 @@ def scrape_product_price(url):
         # Parse the HTML content using BeautifulSoup
         soup = BeautifulSoup(response.content, 'html.parser')
 
-        # Extract the relevant information (product title, price, etc.)
-        product_title = soup.find('h1').text.strip()
-        price = soup.find('span', class_='product-price').text.strip()
+        # Extract the relevant information based on the provided element tag
+        elements = soup.find_all(element_tag)
+        info = []
 
-        # Convert the price to a numerical value
-        price = float(price.replace('$', '').replace(',', ''))
+        for element in elements:
+            text = element.text.strip()
+            info.append(text)
 
-        return product_title, price
+        return tuple(info)  # Return extracted information as a tuple
     except Exception as e:
-        log_message(f'Failed to scrape product price: {str(e)}')
-        return None, None
+        log_message(f'Failed to scrape product information: {str(e)}')
+        return (),  # Return an empty tuple if scraping fails
+
 
 def monitor_price_change(url, desired_price):
     while True:
         try:
-            product_title, current_price = scrape_product_price(url)
-            if product_title and current_price:
+            product_info = scrape_product_info(url, 'h1')
+            if len(product_info) >= 2:
+                product_title, current_price = product_info[:2]
                 log_message(f'Current price of {product_title}: {current_price}')
 
                 if current_price <= desired_price:
@@ -87,7 +92,7 @@ def log_message(message):
         file.write(log_entry + '\n')
 
 #Example usage
-#product_url = 'https://www.example.com/product-url'
-#desired_price = 50.00
+product_url = input("Input the product url:\n")
+desired_price = input("At what price should we notify you?\n")
 
-#monitor_price_change(product_url, desired_price)*/
+monitor_price_change(product_url, desired_price)

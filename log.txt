@@ -1,1 +1,8 @@
 
+2023-06-05 14:38:25: Failed to scrape product price: 404 Client Error: Not Found for url: https://www.example.com/product-url
+2023-06-05 14:41:47: Monitoring stopped by user
+2023-06-05 14:49:52: Failed to scrape product price: 'NoneType' object has no attribute 'text'
+2023-06-05 14:53:23: Monitoring stopped by user
+2023-06-05 15:08:00: Failed to find required HTML elements on the page
+2023-06-05 15:15:28: Monitoring stopped by user
+2023-06-05 15:48:32: Monitoring stopped by user
